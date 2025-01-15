@@ -10,7 +10,30 @@
 <body>
     <div class="container">
         <h1>Welcome to Datasphere</h1>
-        <p>Your Solana-powered Web3 site is under construction.</p>
+        <p>Your gateway to Solana Web3 technology.</p>
+        <button id="connect-wallet">Connect Phantom Wallet</button>
+        <div id="wallet-info" style="margin-top: 20px;"></div>
     </div>
+
+    <script>
+        async function connectWallet() {
+            const isPhantomInstalled = window.solana && window.solana.isPhantom;
+            const walletInfo = document.getElementById("wallet-info");
+            
+            if (!isPhantomInstalled) {
+                walletInfo.innerHTML = "<p style='color: red;'>Phantom Wallet is not installed. Please install it to continue.</p>";
+                return;
+            }
+
+            try {
+                const response = await window.solana.connect({ onlyIfTrusted: false });
+                walletInfo.innerHTML = "<p>Connected: " + response.publicKey.toString() + "</p>";
+            } catch (err) {
+                walletInfo.innerHTML = "<p style='color: red;'>Failed to connect: " + err.message + "</p>";
+            }
+        }
+
+        document.getElementById("connect-wallet").addEventListener("click", connectWallet);
+    </script>
 </body>
 </html>
